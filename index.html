@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i'm so sorry · please stay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            background: linear-gradient(145deg, #fef9f3 0%, #ffe9e0 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* LANDING PAGE */
+        .landing-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #ffc1b0 0%, #ffa58c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .landing-page.slide-up {
+            transform: translateY(-100%);
+        }
+
+        .landing-content {
+            text-align: center;
+            padding: 2rem;
+            animation: gentlePulse 2s infinite;
+        }
+
+        @keyframes gentlePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .landing-heart {
+            font-size: 8rem;
+            filter: drop-shadow(0 20px 30px rgba(200, 50, 50, 0.4));
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.15); }
+            35% { transform: scale(1); }
+            45% { transform: scale(1.08); }
+            55% { transform: scale(1); }
+        }
+
+        .landing-title {
+            font-size: 4.5rem;
+            font-weight: 600;
+            color: #3f1a1a;
+            text-shadow: 0 5px 15px rgba(255, 240, 230, 0.6);
+            margin-bottom: 1rem;
+        }
+
+        .landing-sub {
+            font-size: 2rem;
+            color: #581f1f;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            display: inline-block;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            margin: 2rem 0;
+        }
+
+        .landing-click {
+            font-size: 1.8rem;
+            color: #3d1717;
+            margin-top: 3rem;
+            opacity: 0.9;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* MAIN CONTENT (initially hidden) */
+        .main-content {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        /* floating soft shapes */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 60vmax;
+            height: 60vmax;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 200, 180, 0.3) 0%, transparent 60%);
+            top: 10%;
+            left: -10%;
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            width: 80vmin;
+            height: 80vmin;
+            background: radial-gradient(circle at 70% 80%, rgba(255, 170, 150, 0.2) 0%, transparent 70%);
+            bottom: 0;
+            right: 0;
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* falling hearts container */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.7;
+            color: #ff7b89;
+            animation: fall linear forwards;
+            filter: drop-shadow(0 0 8px rgba(255, 120, 100, 0.5));
+            user-select: none;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) scale(0.8);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.6;
+                transform: translateY(40vh) rotate(90deg) scale(1.1);
+            }
+            80% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(110vh) rotate(180deg) scale(0.9);
+                opacity: 0;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 48px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), 0 10px 30px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+            max-width: 880px;
+            width: 100%;
+            padding: 3rem 2.5rem;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.25s ease;
+            border: 1px solid rgba(255, 245, 235, 0.5);
+        }
+
+        .apology-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .heart-doodle {
+            background: #ffb4a2;
+            width: 70px;
+            height: 70px;
+            border-radius: 40% 40% 20% 40% / 40% 40% 20% 40%;
+            transform: rotate(20deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 8px 12px 18px rgba(255, 100, 80, 0.2);
+            transition: all 0.3s;
+        }
+        .heart-doodle svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+            transform: rotate(-20deg);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .title {
+            font-size: 2.9rem;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            color: #4a3729;
+            text-shadow: 0 2px 5px rgba(255,255,240,0.8);
+        }
+        .title span {
+            font-weight: 300;
+            font-size: 1.2rem;
+            display: block;
+            color: #b95c4a;
+            margin-top: 0.5rem;
+        }
+
+        .message {
+            margin: 2.5rem 0 2rem;
+            background: rgba(250, 240, 235, 0.6);
+            border-radius: 2rem;
+            padding: 2rem 2.2rem;
+            border-left: 8px solid #f6a48d;
+            box-shadow: 0 12px 18px -12px rgba(120, 60, 40, 0.2);
+            backdrop-filter: blur(4px);
+        }
+
+        .message p {
+            font-size: 1.5rem;
+            line-height: 1.5;
+            color: #2c1f18;
+            margin-bottom: 1.2rem;
+        }
+
+        .message .big-sorry {
+            font-size: 2.3rem;
+            font-weight: 500;
+            color: #b64932;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffe6d5 0%, #ffe6d5 40%);
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #632e1e;
+            display: inline-block;
+        }
+
+        .proof-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin: 2.5rem 0 2.8rem;
+            justify-content: center;
+        }
+
+        .proof-item {
+            background: white;
+            flex: 1 1 150px;
+            min-width: 140px;
+            border-radius: 28px;
+            padding: 1.5rem 0.8rem;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255, 220, 200, 0.7);
+            transition: all 0.25s;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+        }
+
+        .proof-item:hover {
+            transform: translateY(-6px);
+            border-color: #f9ac94;
+            box-shadow: 0 30px 25px -15px #ffc9b5;
+        }
+
+        .proof-emoji {
+            font-size: 2.8rem;
+            margin-bottom: 0.6rem;
+            filter: drop-shadow(2px 6px 6px rgba(255, 140, 100, 0.3));
+        }
+
+        .eternal-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2.2rem 0 2rem;
+            color: #914f3b;
+            font-size: 1.8rem;
+        }
+
+        .eternal-line span {
+            background: #f0cfc0;
+            padding: 0.4rem 2rem;
+            border-radius: 120px;
+            font-size: 1.7rem;
+            color: #4b2a1d;
+            box-shadow: inset 0 -2px 0 #e2b9a8;
+        }
+
+        /* MUSIC PLAYER - BEAUTIFUL AND PROMINENT */
+        .music-player-section {
+            background: rgba(255, 215, 195, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0 1.5rem;
+            border: 2px solid rgba(255, 180, 150, 0.8);
+            box-shadow: 0 20px 30px -10px rgba(200, 100, 70, 0.3);
+        }
+
+        .music-title {
+            font-size: 1.6rem;
+            color: #732e1a;
+            margin-bottom: 1.2rem;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .music-btn {
+            background: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #ffb49e;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.15);
+            background: #ffe1d2;
+        }
+
+        .volume-slider {
+            width: 130px;
+            height: 8px;
+            border-radius: 10px;
+            background: #ffc8b8;
+            -webkit-appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #fc5e3a;
+            cursor: pointer;
+        }
+
+        .song-label {
+            font-size: 1.3rem;
+            color: #a1422a;
+            font-weight: 500;
+            background: rgba(255,255,240,0.5);
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+        }
+
+        .unmute-notice {
+            text-align: center;
+            margin-top: 0.8rem;
+            font-size: 1rem;
+            color: #b34222;
+            background: rgba(255, 220, 200, 0.7);
+            padding: 0.5rem;
+            border-radius: 30px;
+            border: 1px dashed #fc7a5f;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0 1rem;
+        }
+
+        .btn {
+            border: none;
+            background: white;
+            padding: 1rem 2.6rem;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #4b3024;
+            box-shadow: 0 8px 12px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid rgba(255, 255, 240, 0.7);
+        }
+
+        .btn-primary {
+            background: #fca288;
+            color: #2f1b12;
+        }
+
+        .btn-primary:hover {
+            background: #ffb49e;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 235, 220, 0.8);
+        }
+        .btn-secondary:hover {
+            background: #ffe1d2;
+        }
+
+        #replyMessage {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            background: #e3dfca;
+            border-radius: 120px;
+            margin: 1.5rem auto;
+            width: fit-content;
+            padding: 0;
+        }
+
+        #replyMessage.show-reply {
+            max-height: 150px;
+            opacity: 1;
+            padding: 1rem 2.5rem;
+        }
+
+        .reply-text {
+            font-size: 1.6rem;
+            color: #2a4433;
+        }
+
+        .foot-note {
+            text-align: center;
+            margin-top: 2.8rem;
+            font-size: 1.3rem;
+            color: #aa7865;
+            border-top: 2px dashed #f7c8b6;
+            padding-top: 1.8rem;
+        }
+
+        @media (max-width: 600px) {
+            .landing-title { font-size: 3rem; }
+            .card { padding: 2rem 1.5rem; }
+            .title { font-size: 2.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LANDING PAGE -->
+    <div class="landing-page" id="landingPage">
+        <div class="landing-content">
+            <div class="landing-heart">❤️</div>
+            <h1 class="landing-title">I'M SO SORRY</h1>
+            <div class="landing-sub">I just want another chance</div>
+            <p style="font-size: 1.8rem; color: #3f1a1a; margin: 2rem 0; font-weight: 500;">I will gain your trust all over again</p>
+            <div class="landing-click">👇 CLICK ANYWHERE TO CONTINUE 👇</div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content" id="mainContent">
+        <!-- Falling hearts container -->
+        <div class="hearts-container" id="heartsContainer"></div>
+
+        <div class="card">
+            <div class="apology-header">
+                <div class="heart-doodle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#ffffff"/>
+                    </svg>
+                </div>
+                <div class="title">
+                    i'm so deeply sorry.
+                    <span>from the bottom of my heart</span>
+                </div>
+            </div>
+
+            <div class="message">
+                <p><span class="big-sorry">I know</span> i made a stupid mistake. A careless, dumb error — and i hate that it hurt you.</p>
+                <p><span class="highlight">I am not the bad person you might think i am.</span> Please believe me: my heart never meant any harm. I will <strong>prove it to you</strong>, day by day, if you give me that chance.</p>
+                <p>I really don't want to lose you. The thought of you seeing me badly tears me apart — because i'm genuinely not that person. There's no way i would ever take away the opportunity for <strong>us to be happy</strong>.</p>
+            </div>
+
+            <div class="proof-grid">
+                <div class="proof-item" id="proof1"><div class="proof-emoji">🤝</div><p>i'll listen</p><small>without defense</small></div>
+                <div class="proof-item" id="proof2"><div class="proof-emoji">🌱</div><p>grow & learn</p><small>from my mistake</small></div>
+                <div class="proof-item" id="proof3"><div class="proof-emoji">⏳</div><p>be patient</p><small>with your heart</small></div>
+                <div class="proof-item" id="proof4"><div class="proof-emoji">❤️‍🩹</div><p>earn your trust</p><small>slowly, truly</small></div>
+            </div>
+
+            <div class="eternal-line">
+                <span>always together</span>
+                <span style="font-size: 2rem; background: none;">🤲</span>
+                <span>never apart</span>
+            </div>
+
+            <!-- BEAUTIFUL MUSIC PLAYER WITH AUTOPLAY (muted initially) -->
+            <div class="music-player-section">
+                <div class="music-title">🎵 a song from my heart to yours</div>
+
+                <audio src="209.mp3" autoplay   controls>bord man vaghtiye ke be to mibazam...</audio>
+                
+               
+                    <!-- Replace with your actual song file -->
+                
+                    <!-- If you have a URL instead: -->
+                    <!-- <source src="https://example.com/song.mp3" type="audio/mpeg"> -->
+                
+                
+                 
+                
+                
+           
+                
+               
+
+            <div class="button-group">
+                <button class="btn btn-primary" id="forgiveBtn">💬 I hear you</button>
+                <button class="btn btn-secondary" id="togetherBtn">✨ Always together</button>
+            </div>
+
+            <div id="replyMessage"><span class="reply-text" id="replyText"></span></div>
+            <div class="foot-note">i really don't want to lose you — you are my home. 🏡</div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // LANDING PAGE CLICK HANDLER
+            const landingPage = document.getElementById('landingPage');
+            const mainContent = document.getElementById('mainContent');
+            
+            landingPage.addEventListener('click', function() {
+                // Slide up landing
+                landingPage.classList.add('slide-up');
+                
+                // Show main content
+                mainContent.classList.add('visible');
+                
+                // Start falling hearts
+                setTimeout(() => {
+                    startFallingHearts();
+                }, 500);
+                
+                // Try to autoplay music (muted)
+                const audio = document.getElementById('loveSong');
+                audio.muted = true;
+                audio.play().then(() => {
+                    console.log('Autoplay started (muted)');
+                }).catch(e => {
+                    console.log('Autoplay failed, user must click:', e);
+                });
+            });
+
+            // FALLING HEARTS
+            const heartsContainer = document.getElementById('heartsContainer');
+            const heartSymbols = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🤍', '🩷', '❤️‍🩹', '💖', '💗'];
+            
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.fontSize = (0.8 + Math.random() * 2) + 'rem';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (5 + Math.random() * 7) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.opacity = 0.4 + Math.random() * 0.4;
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    if (heart.parentNode) heart.remove();
+                }, 12000);
+            }
+
+            function startFallingHearts() {
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(createHeart, i * 150);
+                }
+                setInterval(createHeart, 350);
+            }
+
+            // MUSIC PLAYER CONTROLS
+            const audio = document.getElementById('loveSong');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const unmuteButton = document.getElementById('unmuteButton');
+            const unmuteNotice = document.getElementById('unmuteNotice');
+            
+            let isPlaying = false;
+            
+            // Set initial volume
+            audio.volume = 0.3;
+            
+            // Play/Pause button
+            playPauseBtn.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                    playPauseBtn.textContent = '⏸️';
+                    isPlaying = true;
+                } else {
+                    audio.pause();
+                    playPauseBtn.textContent = '▶️';
+                    isPlaying = false;
+                }
+            });
+            
+            // Restart button
+            restartBtn.addEventListener('click', () => {
+                audio.currentTime = 0;
+                if (audio.paused) {
+                    audio.play();
+                    playPauseBtn.textContent = '⏸️';
+                }
+            });
+            
+            // Volume slider
+            volumeSlider.addEventListener('input', (e) => {
+                audio.volume = e.target.value;
+            });
+            
+            // UNMUTE BUTTON (this gives user control and enables unmuted autoplay)
+            unmuteButton.addEventListener('click', () => {
+                audio.muted = false;
+                audio.play();
+                audio.volume = volumeSlider.value;
+                unmuteButton.textContent = '🔊 Music is playing';
+                unmuteButton.style.background = '#4CAF50';
+                unmuteNotice.innerHTML = '🔊 Music unmuted! Enjoy ❤️';
+                playPauseBtn.textContent = '⏸️';
+                isPlaying = true;
+            });
+
+            // INTERACTIVE MESSAGES
+            const replyBox = document.getElementById('replyMessage');
+            const replyText = document.getElementById('replyText');
+            const forgiveBtn = document.getElementById('forgiveBtn');
+            const togetherBtn = document.getElementById('togetherBtn');
+            const proof1 = document.getElementById('proof1');
+            const proof2 = document.getElementById('proof2');
+            const proof3 = document.getElementById('proof3');
+            const proof4 = document.getElementById('proof4');
+
+            function showMessage(text, emoji = '') {
+                replyText.innerText = text + ' ' + emoji;
+                replyBox.classList.add('show-reply');
+                
+                if (window.replyTimer) clearTimeout(window.replyTimer);
+                window.replyTimer = setTimeout(() => {
+                    replyBox.classList.remove('show-reply');
+                }, 4000);
+            }
+
+            forgiveBtn.addEventListener('click', () => showMessage('Thank you. I want to believe you.', '🫂'));
+            togetherBtn.addEventListener('click', () => showMessage('Together, we can mend anything.', '🌄'));
+            proof1.addEventListener('click', () => showMessage('I will really listen — no interruptions.', '👂'));
+            proof2.addEventListener('click', () => showMessage('This mistake will make me better for us.', '🌿'));
+            proof3.addEventListener('click', () => showMessage('I can wait. However long it takes.', '⏳'));
+            proof4.addEventListener('click', () => showMessage('Trust rebuilt, brick by brick.', '🧱'));
+
+            // Heart doodle animation
+            const heartDoodle = document.querySelector('.heart-doodle');
+            setInterval(() => {
+                heartDoodle.style.transform = 'rotate(22deg) scale(1.03)';
+                setTimeout(() => heartDoodle.style.transform = 'rotate(18deg) scale(1)', 200);
+            }, 2000);
+
+            // Welcome message
+            setTimeout(() => {
+                if (mainContent.classList.contains('visible')) {
+                    showMessage('Please take your time reading this...', '🌸');
+                }
+            }, 1500);
+        })();
+    </script>
+</body>
+</html>
